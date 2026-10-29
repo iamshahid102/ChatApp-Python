@@ -22,7 +22,7 @@ export function MessageBubble({ message, own, isGroup, senderName }: MessageBubb
         className={cn(
           "max-w-[82%] rounded-[20px] px-4 py-2.5 text-[15px] leading-[1.45] break-words whitespace-pre-wrap sm:max-w-[76%]",
           own
-            ? "rounded-br-[6px] bg-ink text-white"
+            ? "rounded-br-[6px] bg-ink text-on-ink"
             : "rounded-bl-[6px] bg-surface-3 text-ink",
           message.pending && "opacity-60",
         )}

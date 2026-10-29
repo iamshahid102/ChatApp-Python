@@ -1,4 +1,5 @@
 import { LogoMark } from "@/components/brand/logo-mark";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface AuthShellProps {
   title: string;
@@ -9,8 +10,11 @@ interface AuthShellProps {
 
 export function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
-    <main className="grid min-h-dvh place-items-center bg-page p-4 sm:p-6">
-      <div className="w-full max-w-[920px] overflow-hidden rounded-[28px] bg-surface shadow-[0_1px_0_rgba(0,0,0,0.04)] lg:grid lg:grid-cols-[0.9fr_1.1fr]">
+    <main className="relative grid min-h-dvh place-items-center bg-page p-4 sm:p-6">
+      <div className="absolute top-4 right-4 z-10 sm:top-6 sm:right-6">
+        <ThemeToggle className="size-10 bg-surface text-ink hover:bg-hover" />
+      </div>
+      <div className="w-full max-w-[920px] overflow-hidden rounded-[28px] bg-surface shadow-[0_1px_0_var(--hairline)] lg:grid lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="hidden flex-col justify-between bg-lime p-10 lg:flex">
           <LogoMark />
           <div>

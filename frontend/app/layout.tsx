@@ -4,6 +4,7 @@ import { Inter_Tight } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/providers/query-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 import "./globals.css";
 
@@ -39,7 +40,11 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#B9BFB2",
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#B9BFB2" },
+    { media: "(prefers-color-scheme: dark)", color: "#101310" },
+  ],
 };
 
 export default function RootLayout({
@@ -48,12 +53,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${interTight.variable} font-sans antialiased`}>
-        <QueryProvider>
-          {children}
-          <Toaster position="top-center" />
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            {children}
+            <Toaster position="top-center" />
+          </QueryProvider>
+        </ThemeProvider>
         <ServiceWorkerRegister />
       </body>
     </html>

@@ -80,7 +80,7 @@ export function InstallPrompt() {
       <button
         type="button"
         onClick={handleInstall}
-        className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-white/75 text-[13px] font-semibold text-ink transition hover:bg-white focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
+        className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-full bg-chrome text-[13px] font-semibold text-ink transition hover:bg-chrome-strong focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
       >
         <Download className="size-4" />
         Install app

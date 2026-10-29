@@ -199,7 +199,7 @@ export function GroupInfoSheet({
                       aria-label={`Add ${user.display_name}`}
                       disabled={addMutation.isPending}
                       onClick={() => addMutation.mutate(user.id)}
-                      className="grid size-8 place-items-center rounded-full bg-ink text-white transition hover:bg-ink/85 disabled:opacity-50"
+                      className="grid size-8 place-items-center rounded-full bg-ink text-on-ink transition hover:bg-ink/85 disabled:opacity-50"
                     >
                       {addMutation.isPending ? (
                         <Loader2 className="size-3.5 animate-spin" />

@@ -4,6 +4,7 @@ import { ChevronLeft, Info } from "lucide-react";
 import Link from "next/link";
 
 import { UserAvatar } from "@/components/chat/user-avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   conversationSubtitle,
   conversationTitle,
@@ -39,7 +40,7 @@ export function ChatHeader({
         <Link
           href="/chat"
           aria-label="Back to chats"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-white/65 text-ink transition hover:bg-white focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-chrome text-ink transition hover:bg-chrome-strong focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
         >
           <ChevronLeft className="size-4" />
         </Link>
@@ -70,7 +71,7 @@ export function ChatHeader({
           type="button"
           onClick={onInfo}
           aria-label="Conversation details"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-white/65 text-ink transition hover:bg-white focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-chrome text-ink transition hover:bg-chrome-strong focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
         >
           <Info className="size-4" />
         </button>
@@ -98,11 +99,12 @@ export function ChatHeader({
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
+        <ThemeToggle />
         <button
           type="button"
           onClick={onInfo}
           aria-label="Conversation details"
-          className="grid size-9 place-items-center rounded-full bg-surface-2 text-ink transition hover:bg-[#dcded7] focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
+          className="grid size-9 place-items-center rounded-full bg-surface-2 text-ink transition hover:bg-hover focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none"
         >
           <Info className="size-4" />
         </button>

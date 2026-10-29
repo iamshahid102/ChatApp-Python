@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { UserAvatar } from "@/components/chat/user-avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authApi } from "@/lib/api";
 import { clearApiCache } from "@/lib/pwa";
 import { useSession } from "@/store/session";
@@ -54,12 +55,13 @@ export function ProfileCard() {
             @{user?.username ?? "you"}
           </p>
         </div>
+        <ThemeToggle className="bg-chrome hover:bg-chrome-strong" />
         <button
           type="button"
           onClick={handleLogout}
           disabled={loggingOut}
           aria-label="Log out"
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-white/60 text-ink transition hover:bg-white focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none disabled:opacity-60"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-chrome text-ink transition hover:bg-chrome-strong focus-visible:ring-2 focus-visible:ring-ink focus-visible:outline-none disabled:opacity-60"
         >
           {loggingOut ? (
             <Loader2 className="size-4 animate-spin" />

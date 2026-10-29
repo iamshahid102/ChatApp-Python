@@ -57,7 +57,7 @@ export function ConversationList() {
             type="button"
             onClick={() => openDialog("direct")}
             aria-label="Start a new conversation"
-            className="grid size-9 place-items-center rounded-full bg-ink text-white transition hover:bg-ink/85 focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="grid size-9 place-items-center rounded-full bg-ink text-on-ink transition hover:bg-ink/85 focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <Plus className="size-4" />
           </button>
@@ -109,8 +109,8 @@ export function ConversationList() {
                   className={cn(
                     "flex min-h-[60px] items-center gap-3 rounded-[999px] px-3 py-2 transition",
                     active
-                      ? "bg-ink text-white"
-                      : "bg-surface-2 text-ink hover:bg-[#dcded7]",
+                      ? "bg-ink text-on-ink"
+                      : "bg-surface-2 text-ink hover:bg-hover",
                   )}
                 >
                   <UserAvatar
@@ -138,7 +138,7 @@ export function ConversationList() {
                         <span
                           className={cn(
                             "shrink-0 text-[10.5px]",
-                            active ? "text-white/50" : "text-ink-soft",
+                            active ? "text-on-ink/50" : "text-ink-soft",
                           )}
                         >
                           {formatTime(conversation.last_message.created_at)}
@@ -148,7 +148,7 @@ export function ConversationList() {
                     <span
                       className={cn(
                         "mt-0.5 block truncate text-[12px]",
-                        active ? "text-white/55" : "text-ink-soft",
+                        active ? "text-on-ink/55" : "text-ink-soft",
                       )}
                     >
                       {preview}

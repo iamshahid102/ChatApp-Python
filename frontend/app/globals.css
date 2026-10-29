@@ -17,6 +17,10 @@
   --color-line: var(--line);
   --color-lime: var(--lime);
   --color-lime-deep: var(--lime-deep);
+  --color-on-ink: var(--on-ink);
+  --color-hover: var(--hover);
+  --color-chrome: var(--chrome);
+  --color-chrome-strong: var(--chrome-strong);
   --color-danger: var(--danger);
   --color-online: var(--online);
 
@@ -63,6 +67,14 @@
   --danger: #c4472e;
   --online: #7ed321;
 
+  /* surfaces that must not flip with the theme (text on --ink fills,
+     translucent chrome sitting on a lime card) */
+  --on-ink: #ffffff;
+  --hover: #dcded7;
+  --chrome: rgba(255, 255, 255, 0.6);
+  --chrome-strong: #ffffff;
+  --hairline: rgba(0, 0, 0, 0.05);
+
   /* shadcn/ui tokens mapped onto the palette */
   --background: var(--page);
   --foreground: var(--ink);
@@ -71,7 +83,7 @@
   --popover: var(--surface);
   --popover-foreground: var(--ink);
   --primary: var(--ink);
-  --primary-foreground: #f7f7f3;
+  --primary-foreground: var(--on-ink);
   --secondary: var(--surface-2);
   --secondary-foreground: var(--ink);
   --muted: var(--surface-2);
@@ -83,6 +95,45 @@
   --input: var(--line);
   --ring: var(--ink);
   --radius: 1rem;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* ChatApp palette — dark */
+  --page: #101310;
+  --surface: #191c17;
+  --surface-2: #232722;
+  --surface-3: #2d3229;
+  --ink: #f2f4ec;
+  --ink-soft: #a3aa9b;
+  --line: #353a2f;
+  --lime: #c7f032;
+  --lime-deep: #d8ff5f;
+  --danger: #ff8163;
+  --online: #8ce03a;
+
+  --on-ink: #10120d;
+  --hover: #31362c;
+  --chrome: rgba(255, 255, 255, 0.16);
+  --chrome-strong: rgba(255, 255, 255, 0.28);
+  --hairline: rgba(255, 255, 255, 0.07);
+
+  color-scheme: dark;
+}
+
+/* Lime is a fixed brand surface in both themes, so anything painted on top of
+   it keeps the light-theme ink instead of inheriting the inverted palette. */
+.dark .bg-lime,
+.dark .bg-lime-deep,
+.dark .bg-lime\/40 {
+  --ink: #0d0d0d;
+  --ink-soft: #4b5241;
+  --line: rgba(13, 13, 13, 0.16);
+  --on-ink: #ffffff;
+  --chrome: rgba(255, 255, 255, 0.6);
+  --chrome-strong: #ffffff;
+  color: var(--ink);
 }
 
 @layer base {

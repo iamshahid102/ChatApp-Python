@@ -50,7 +50,7 @@ export function Composer({ conversationId }: { conversationId: string }) {
         type="submit"
         disabled={!canSend}
         aria-label="Send message"
-        className="grid size-12 shrink-0 place-items-center rounded-full bg-ink text-white transition hover:bg-ink/85 focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-35"
+        className="grid size-12 shrink-0 place-items-center rounded-full bg-ink text-on-ink transition hover:bg-ink/85 focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-35"
       >
         <ArrowUp className="size-5" strokeWidth={2.4} />
       </button>

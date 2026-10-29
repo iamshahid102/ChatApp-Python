@@ -112,7 +112,7 @@ export function NewConversationDialog({
                 className={cn(
                   "h-9 rounded-full px-4 text-[13px] font-semibold transition",
                   mode === item
-                    ? "bg-ink text-white"
+                    ? "bg-ink text-on-ink"
                     : "bg-surface-2 text-ink-soft hover:text-ink",
                 )}
               >
@@ -143,7 +143,7 @@ export function NewConversationDialog({
                         type="button"
                         aria-label={`Remove ${user.display_name}`}
                         onClick={() => toggleSelected(user)}
-                        className="grid size-5 place-items-center rounded-full bg-white/60 hover:bg-white"
+                        className="grid size-5 place-items-center rounded-full bg-chrome hover:bg-chrome-strong"
                       >
                         <X className="size-3" />
                       </button>

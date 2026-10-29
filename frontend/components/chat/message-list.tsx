@@ -115,7 +115,7 @@ export function MessageList({ conversation, currentUserId }: MessageListProps) {
     >
       {status !== "open" ? (
         <div className="mb-3 flex justify-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-[11px] font-medium text-white/85">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-[11px] font-medium text-on-ink/85">
             <WifiOff className="size-3" />
             Offline — reconnecting…
           </span>

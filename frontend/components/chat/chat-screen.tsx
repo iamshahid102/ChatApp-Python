@@ -64,7 +64,7 @@ export function ChatScreen({ conversationId }: { conversationId: string }) {
           </Button>
           <Link
             href="/chat"
-            className="inline-flex h-10 items-center rounded-full bg-ink px-4 text-[13px] font-semibold text-white"
+            className="inline-flex h-10 items-center rounded-full bg-ink px-4 text-[13px] font-semibold text-on-ink"
           >
             Back to chats
           </Link>

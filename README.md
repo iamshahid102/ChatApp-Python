@@ -35,6 +35,8 @@ backend/      FastAPI API + WebSocket server
 - Conversation list sorted by activity, with unread badges.
 - Online / offline presence for people you share chats with.
 - Installable PWA with offline shell and reconnect handling.
+- Light / dark theme with light, dark and system options; the choice is remembered per
+  browser and the OS setting is followed live when "System" is selected.
 - Works at mobile (360px+), tablet and desktop widths.
 
 Deliberately **not** included in v1: attachments, read receipts, typing indicator, push
@@ -134,6 +136,7 @@ cd frontend
 npx tsc --noEmit
 npm run lint
 npm run build
+node scripts/theme-check.mjs   # theme toggle, in a real browser (needs the app running)
 ```
 
 Backend tests cover auth, direct/group conversations, membership permissions, unread
