@@ -1,0 +1,209 @@
+# ChatApp
+
+A small, installable chat app: **1:1 chat**, **group chat**, real-time messages, and a PWA
+that works in the browser, on a phone home screen and as a desktop app shortcut.
+
+The full product/technical plan is in [`CHATAPP_PLAN.md`](./CHATAPP_PLAN.md).
+
+---
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Frontend | Next.js 15 (App Router), TypeScript, Tailwind CSS v4, shadcn/ui, TanStack Query, Zustand |
+| Backend | FastAPI (Python 3.12), Motor (async MongoDB), PyJWT, argon2 |
+| Realtime | Native WebSocket (`/ws`) |
+| Database | MongoDB |
+| PWA | Web app manifest + dependency-free service worker |
+
+Frontend and backend are independent deployables:
+
+```
+frontend/     Next.js PWA
+backend/      FastAPI API + WebSocket server
+```
+
+---
+
+## What it does
+
+- Register / sign in with a username and password.
+- Start a one-to-one conversation (get-or-create, no duplicates).
+- Create a group, add or remove members, leave a group.
+- Send and receive text messages in real time, with optimistic sending.
+- Conversation list sorted by activity, with unread badges.
+- Online / offline presence for people you share chats with.
+- Installable PWA with offline shell and reconnect handling.
+- Works at mobile (360px+), tablet and desktop widths.
+
+Deliberately **not** included in v1: attachments, read receipts, typing indicator, push
+notifications, message editing/deletion, reactions, calls, search, OAuth, password reset.
+
+---
+
+## Prerequisites
+
+- Node.js 20+ (built with Node 24)
+- Python 3.12+
+- MongoDB 7/8 running locally (`mongodb://127.0.0.1:27017`) or a MongoDB Atlas URI
+- npm
+
+---
+
+## 1. Backend
+
+```bash
+cd backend
+
+# Windows
+python -m venv .venv
+.venv/Scripts/activate
+
+# macOS / Linux
+# python3 -m venv .venv
+# source .venv/bin/activate
+
+pip install -r requirements-dev.txt
+cp .env.example .env        # edit MONGODB_URI / JWT_SECRET if needed
+uvicorn app.main:app --reload --port 8000
+```
+
+- API: http://127.0.0.1:8000
+- Swagger: http://127.0.0.1:8000/docs
+- Health: http://127.0.0.1:8000/health
+
+MongoDB indexes are created automatically on startup.
+
+## 2. Frontend
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local   # defaults to the local backend
+npm run dev
+```
+
+Open http://localhost:3000 — you are redirected to `/login`.
+
+To test the PWA and service worker you need a production build:
+
+```bash
+npm run build
+npm start
+```
+
+Service workers are disabled in `next dev` on purpose.
+
+---
+
+## Environment variables
+
+### `backend/.env`
+
+| Variable | Default | Notes |
+|---|---|---|
+| `MONGODB_URI` | `mongodb://127.0.0.1:27017` | Atlas URI in production |
+| `MONGODB_DB` | `chatapp` | Database name |
+| `JWT_SECRET` | dev fallback | **Set a real 32+ byte secret in production** |
+| `ACCESS_TOKEN_EXPIRE_DAYS` | `7` | v1 has no refresh tokens |
+| `CORS_ORIGINS` | local dev origins | Comma-separated frontend origins |
+| `MAX_GROUP_MEMBERS` | `50` | Guard only |
+
+### `frontend/.env.local`
+
+| Variable | Default |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | `http://127.0.0.1:8000/api/v1` |
+| `NEXT_PUBLIC_WS_URL` | `ws://127.0.0.1:8000/ws` |
+
+Production must use `https://` and `wss://`; the PWA cannot install without HTTPS.
+
+---
+
+## Tests and checks
+
+```bash
+# backend (requires MongoDB on 127.0.0.1:27017)
+cd backend
+.venv/Scripts/python -m pytest -q
+.venv/Scripts/python -m ruff check app tests
+
+# frontend
+cd frontend
+npx tsc --noEmit
+npm run lint
+npm run build
+```
+
+Backend tests cover auth, direct/group conversations, membership permissions, unread
+counts, message pagination and idempotency, WebSocket authentication, real-time delivery
+and rate/validation errors.
+
+---
+
+## API surface
+
+Base path: `/api/v1`. Auth: `Authorization: Bearer <jwt>`.
+
+| Method | Path |
+|---|---|
+| POST | `/auth/register`, `/auth/login`, `/auth/logout` |
+| GET | `/auth/me` |
+| GET | `/users?q=` , `/users/{id}` |
+| GET | `/conversations` |
+| POST | `/conversations/direct`, `/conversations/group` |
+| GET | `/conversations/{id}` |
+| POST | `/conversations/{id}/members` |
+| DELETE | `/conversations/{id}/members/{user_id}` |
+| GET | `/conversations/{id}/messages?before=&limit=` |
+| POST | `/conversations/{id}/messages` |
+| POST | `/conversations/{id}/read` |
+| WS | `/ws?token=<jwt>` |
+
+WebSocket events:
+
+- client → `message.send`, `message.ack`, `ping`
+- server → `ready`, `message.new`, `message.sent`, `conversation.updated`, `presence`, `error`
+
+Errors are `{ "detail": "..." }` on REST and `{ "type": "error", "data": { "code", "message" } }` on the socket.
+
+---
+
+## PWA
+
+- `app/manifest.ts` → `/manifest.webmanifest` (name, icons, standalone display, app shortcuts).
+- `public/sw.js` → precaches the offline page and icons, network-first navigations with an
+  `/offline` fallback, cache-first static assets. API and `/ws` traffic is never cached.
+- Install UI is custom: Chrome/Edge/Android use `beforeinstallprompt`; iOS shows a
+  Share → Add to Home Screen sheet.
+- Icons live in `public/icons/` and are generated by
+  `python scripts/generate_icons.py` (Pillow required, dev-only).
+
+Local install testing on a real phone needs HTTPS. Use a tunnel (Cloudflare Tunnel,
+ngrok) or `next dev --experimental-https`.
+
+---
+
+## Production deployment
+
+1. **MongoDB Atlas** — create a cluster, database user and connection string; use a
+   database named `chatapp`.
+2. **Backend** — deploy `backend/` to Render/Fly/Railway with:
+   `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, set `MONGODB_URI`, `JWT_SECRET`,
+   `CORS_ORIGINS` to your frontend origin. WebSocket support is required.
+3. **Frontend** — deploy `frontend/` to Vercel, set `NEXT_PUBLIC_API_URL` and
+   `NEXT_PUBLIC_WS_URL` (`wss://`).
+4. Verify: CORS preflight, WSS handshake, manifest content type, service worker scope `/`,
+   install prompt on Chrome/Android and Add to Home Screen on iOS.
+
+---
+
+## Known v1 trade-offs
+
+- In-memory WebSocket hub: one backend instance. Horizontal scaling needs Redis pub/sub.
+- JWT bearer token in `localStorage` (no refresh-token rotation). Upgrade path documented
+  in the plan.
+- Group unread counts are computed with a per-conversation count query; fine at this scale.
+- No offline message queue: the composer disables while reconnecting and history refetches
+  after reconnect.
